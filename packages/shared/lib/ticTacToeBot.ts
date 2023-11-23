@@ -1,4 +1,4 @@
-import { pickRandom } from './list';
+import { pickRandom, shuffle } from './list';
 import {
 	GAME_WIN_MATRICES,
 	TicTacToeCellCoordinate,
@@ -93,7 +93,7 @@ export function getMove(game: TicTacToeGame, bot: TicTacToeBot): TicTacToeCellCo
 function getWinOptions(game: TicTacToeGame, player: TicTacToePlayer): TicTacToeWinOption[] {
 	const opponent = getOtherPlayer(player);
 
-	return GAME_WIN_MATRICES.map((matrix) => {
+	return shuffle(GAME_WIN_MATRICES).map((matrix) => {
 		const cells = getCellCoordinatesByMatrix(matrix);
 		const cellValues = cells.map((coord) => getCellValueByCoordinate(game, coord));
 
