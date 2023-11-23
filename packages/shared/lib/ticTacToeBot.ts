@@ -38,7 +38,6 @@ const botLevelMoveGetterMap: {
 	[TicTacToeBotLevel.medium](game) {
 		const winOptions = getWinOptions(game, game.activePlayer).filter((o) => o.score >= 1);
 		if (winOptions.length > 0) {
-			// Pick option with highest score
 			const [winOption] = winOptions.sort((a, b) => b.score - a.score);
 			const moveOptions = winOption.cells.filter(
 				(coord) => getCellValueByCoordinate(game, coord) === 0,
@@ -49,17 +48,28 @@ const botLevelMoveGetterMap: {
 		return botLevelMoveGetterMap[TicTacToeBotLevel.easy](game);
 	},
 
-	// Selects a cell that blocks opponent first, and selects cell that optimizes win odds otherwise
+	// Select center cell, go for the win, block opponent, or pick move that increases win odds
 	[TicTacToeBotLevel.hard](game) {
 		// Always claim middle cell first
 		if (getCellValueByCoordinate(game, [1, 1]) === 0) {
 			return [1, 1];
 		}
 
+		// Search for single-move win options and finish them
+		const winOptions = getWinOptions(game, game.activePlayer).filter((o) => o.score >= 2);
+		if (winOptions.length > 0) {
+			const [winOption] = winOptions.sort((a, b) => b.score - a.score);
+			const moveOptions = winOption.cells.filter(
+				(coord) => getCellValueByCoordinate(game, coord) === 0,
+			);
+			return pickRandom(moveOptions);
+		}
+
+		// Search for opponent's single-move win options and block those
 		const opponent = getOtherPlayer(game.activePlayer);
-		const opponentWinOptions = getWinOptions(game, opponent).filter((o) => o.score >= 2);
-		if (opponentWinOptions.length > 0) {
-			const winOption = pickRandom(opponentWinOptions);
+		const loseOptions = getWinOptions(game, opponent).filter((o) => o.score >= 2);
+		if (loseOptions.length > 0) {
+			const winOption = pickRandom(loseOptions);
 			const moveOptions = winOption.cells.filter(
 				(coord) => getCellValueByCoordinate(game, coord) === 0,
 			);
