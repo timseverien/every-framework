@@ -12,7 +12,7 @@ export const CURRENCIES = [
 	'HKD',
 	'SGD',
 ] as const;
-type Currency = (typeof CURRENCIES)[number];
+export type Currency = (typeof CURRENCIES)[number];
 
 export const CURRENCY_GENERATOR_MAP: {
 	[key in Currency]: ReturnType<typeof getCurrencyPriceGenerator>;
