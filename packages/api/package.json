@@ -2,7 +2,7 @@
   "name": "@ef/api",
   "private": true,
   "scripts": {
-    "dev": "vite-node src/index.ts"
+    "dev": "vite-node index.ts"
   },
   "dependencies": {
     "currency-codes": "^2.1.0",
